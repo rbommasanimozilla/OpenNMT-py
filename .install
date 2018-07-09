@@ -1,0 +1,4 @@
+#!/bin/bash
+virtualenv ../tmp/venv
+source ../tmp/venv/bin/activate
+pip install --no-cache-dir -r requirements.txt
