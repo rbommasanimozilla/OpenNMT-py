@@ -301,7 +301,7 @@ def train_opts(parser):
                        Approximately equivalent to updating
                        batch_size * accum_count batches at once.
                        Recommended for Transformer.""")
-    group.add_argument('-valid_steps', type=int, default=10000,
+    group.add_argument('-valid_steps', type=int, default=30000,
                        help='Perfom validation every X steps')
     group.add_argument('-valid_batch_size', type=int, default=32,
                        help='Maximum batch size for validation')
@@ -309,7 +309,7 @@ def train_opts(parser):
                        help="""Maximum batches of words in a sequence to run
                         the generator on in parallel. Higher is faster, but
                         uses more memory.""")
-    group.add_argument('-train_steps', type=int, default=100000,
+    group.add_argument('-train_steps', type=int, default=230000,
                        help='Number of training steps')
     group.add_argument('-epochs', type=int, default=0,
                        help='Deprecated epochs see train_steps')
@@ -369,7 +369,7 @@ def train_opts(parser):
     group.add_argument('-start_decay_steps', type=int, default=50000,
                        help="""Start decaying every decay_steps after
                        start_decay_steps""")
-    group.add_argument('-decay_steps', type=int, default=10000,
+    group.add_argument('-decay_steps', type=int, default=30000,
                        help="""Decay every decay_steps""")
 
     group.add_argument('-decay_method', type=str, default="",
@@ -378,7 +378,7 @@ def train_opts(parser):
                        help="""Number of warmup steps for custom decay.""")
 
     group = parser.add_argument_group('Logging')
-    group.add_argument('-report_every', type=int, default=50,
+    group.add_argument('-report_every', type=int, default=500,
                        help="Print stats at this interval.")
     group.add_argument('-log_file', type=str, default="",
                        help="Output logs to a file under this path.")
