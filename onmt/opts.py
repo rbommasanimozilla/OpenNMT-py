@@ -378,7 +378,7 @@ def train_opts(parser):
                        help="""Number of warmup steps for custom decay.""")
 
     group = parser.add_argument_group('Logging')
-    group.add_argument('-report_every', type=int, default=500,
+    group.add_argument('-report_every', type=int, default=10000,
                        help="Print stats at this interval.")
     group.add_argument('-log_file', type=str, default="",
                        help="Output logs to a file under this path.")
