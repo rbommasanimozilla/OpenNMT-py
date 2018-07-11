@@ -301,7 +301,7 @@ def train_opts(parser):
                        Approximately equivalent to updating
                        batch_size * accum_count batches at once.
                        Recommended for Transformer.""")
-    group.add_argument('-valid_steps', type=int, default=30000,
+    group.add_argument('-valid_steps', type=int, default=40000,
                        help='Perfom validation every X steps')
     group.add_argument('-valid_batch_size', type=int, default=32,
                        help='Maximum batch size for validation')
@@ -366,10 +366,10 @@ def train_opts(parser):
                        this much if (i) perplexity does not decrease on the
                        validation set or (ii) steps have gone past
                        start_decay_steps""")
-    group.add_argument('-start_decay_steps', type=int, default=50000,
+    group.add_argument('-start_decay_steps', type=int, default=150000,
                        help="""Start decaying every decay_steps after
                        start_decay_steps""")
-    group.add_argument('-decay_steps', type=int, default=30000,
+    group.add_argument('-decay_steps', type=int, default=20000,
                        help="""Decay every decay_steps""")
 
     group.add_argument('-decay_method', type=str, default="",
