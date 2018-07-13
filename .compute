@@ -1,3 +1,3 @@
 #!/bin/bash
 source ../tmp/venv/bin/activate
-python translate.py -gpu 0 -batch_size 32 -beam_size 5 -model models/newsroom-204851216250lr2_step_175000.pt -src /snakepit/shared/data/cornell/newsroom/newsroom-lg/val.txt.srcp -output testout/newsroom-204851216250lr2_step_175000.out -min_length 35 -verbose -stepwise_penalty -coverage_penalty summary -beta 5 -length_penalty wu -alpha 0.9 -verbose -block_ngram_repeat 3 -ignore_when_blocking "." "</t>" "<t>"
+python translate.py -gpu 0 -batch_size 32 -beam_size 5 -model models/newsroom-204825616250lr2_step_250000.pt -src /snakepit/shared/data/cornell/newsroom/newsroom-lg/val.txt.srcp -output testout/newsroom-204825616250lr2_step_250000.out -min_length 25 -verbose -stepwise_penalty -coverage_penalty summary -beta 5 -length_penalty wu -alpha 0.9 -verbose -block_ngram_repeat 3 -ignore_when_blocking "." "</t>" "<t>"
