@@ -93,8 +93,15 @@ class CopyGenerator(nn.Module):
         logits[:, self.tgt_dict.stoi[inputters.PAD_WORD]] = -float('inf')
         prob = self.softmax(logits)
 
-        # Probability of copying p(z=1) batch.
-        p_copy = self.sigmoid(self.linear_copy(hidden))
+        copy_temperature = 0.7
+        adaptive = true
+        if adaptive:
+            # Probability of copying p(z=1) batch.
+            p_copy = self.sigmoid(self.linear_copy(hidden))
+            p_copy = copy_temperature * p_copy
+        else:
+            p_copy = 0.7
+
         # Probibility of not copying: p_{word}(w) * (1 - p(z))
         out_prob = torch.mul(prob, 1 - p_copy.expand_as(prob))
         mul_attn = torch.mul(attn, p_copy.expand_as(attn))
