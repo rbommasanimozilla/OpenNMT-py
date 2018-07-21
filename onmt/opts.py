@@ -233,9 +233,9 @@ def train_opts(parser):
                        <save_model>_N.pt where N is the number
                        of steps""")
 
-    group.add_argument('-save_checkpoint_steps', type=int, default=5000,
+    group.add_argument('-save_checkpoint_steps', type=int, default=25000,
                        help="""Save a checkpoint every X steps""")
-    group.add_argument('-keep_checkpoint', type=int, default=-1,
+    group.add_argument('-keep_checkpoint', type=int, default=2,
                        help="""Keep X checkpoints (negative: keep all)""")
 
     # GPU
@@ -301,7 +301,7 @@ def train_opts(parser):
                        Approximately equivalent to updating
                        batch_size * accum_count batches at once.
                        Recommended for Transformer.""")
-    group.add_argument('-valid_steps', type=int, default=40000,
+    group.add_argument('-valid_steps', type=int, default=50000,
                        help='Perfom validation every X steps')
     group.add_argument('-valid_batch_size', type=int, default=32,
                        help='Maximum batch size for validation')
@@ -309,7 +309,7 @@ def train_opts(parser):
                        help="""Maximum batches of words in a sequence to run
                         the generator on in parallel. Higher is faster, but
                         uses more memory.""")
-    group.add_argument('-train_steps', type=int, default=230000,
+    group.add_argument('-train_steps', type=int, default=250000,
                        help='Number of training steps')
     group.add_argument('-epochs', type=int, default=0,
                        help='Deprecated epochs see train_steps')
@@ -357,7 +357,7 @@ def train_opts(parser):
                        https://arxiv.org/abs/1512.00567""")
     # learning rate
     group = parser.add_argument_group('Optimization- Rate')
-    group.add_argument('-learning_rate', type=float, default=1.0,
+    group.add_argument('-learning_rate', type=float, default=0.1,
                        help="""Starting learning rate.
                        Recommended settings: sgd = 1, adagrad = 0.1,
                        adadelta = 1, adam = 0.001""")
@@ -369,7 +369,7 @@ def train_opts(parser):
     group.add_argument('-start_decay_steps', type=int, default=150000,
                        help="""Start decaying every decay_steps after
                        start_decay_steps""")
-    group.add_argument('-decay_steps', type=int, default=20000,
+    group.add_argument('-decay_steps', type=int, default=100000,
                        help="""Decay every decay_steps""")
 
     group.add_argument('-decay_method', type=str, default="",
