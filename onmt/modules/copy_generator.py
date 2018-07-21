@@ -93,7 +93,7 @@ class CopyGenerator(nn.Module):
         logits[:, self.tgt_dict.stoi[inputters.PAD_WORD]] = -float('inf')
         prob = self.softmax(logits)
 
-        copy_temperature = 0.01
+        copy_temperature = 0.001
         adaptive = True
         if adaptive:
             # Probability of copying p(z=1) batch.
