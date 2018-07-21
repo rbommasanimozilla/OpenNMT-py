@@ -98,7 +98,7 @@ class CopyGenerator(nn.Module):
         if adaptive:
             # Probability of copying p(z=1) batch.
             p_copy = self.sigmoid(self.linear_copy(hidden))
-            #p_copy = copy_temperature * p_copy
+            p_copy = copy_temperature * p_copy
         else:
             p_copy = 0.7
 
