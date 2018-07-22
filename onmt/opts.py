@@ -357,7 +357,7 @@ def train_opts(parser):
                        https://arxiv.org/abs/1512.00567""")
     # learning rate
     group = parser.add_argument_group('Optimization- Rate')
-    group.add_argument('-learning_rate', type=float, default=0.1,
+    group.add_argument('-learning_rate', type=float, default=1.0,
                        help="""Starting learning rate.
                        Recommended settings: sgd = 1, adagrad = 0.1,
                        adadelta = 1, adam = 0.001""")
@@ -366,10 +366,10 @@ def train_opts(parser):
                        this much if (i) perplexity does not decrease on the
                        validation set or (ii) steps have gone past
                        start_decay_steps""")
-    group.add_argument('-start_decay_steps', type=int, default=150000,
+    group.add_argument('-start_decay_steps', type=int, default=50000,
                        help="""Start decaying every decay_steps after
                        start_decay_steps""")
-    group.add_argument('-decay_steps', type=int, default=100000,
+    group.add_argument('-decay_steps', type=int, default=10000,
                        help="""Decay every decay_steps""")
 
     group.add_argument('-decay_method', type=str, default="",
