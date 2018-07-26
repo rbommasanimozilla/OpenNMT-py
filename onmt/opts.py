@@ -203,7 +203,7 @@ def preprocess_opts(parser):
                        help="Random seed")
 
     group = parser.add_argument_group('Logging')
-    group.add_argument('-report_every', type=int, default=100000,
+    group.add_argument('-report_every', type=int, default=1000,
                        help="Report status every this many sentences")
     group.add_argument('-log_file', type=str, default="",
                        help="Output logs to a file under this path.")
