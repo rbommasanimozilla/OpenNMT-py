@@ -2,4 +2,4 @@
 source ../tmp/venv/bin/activate
 mkdir keep
 python preprocess.py -train_src /snakepit/shared/data/nyu/cnndm/train.txt.src -train_tgt /snakepit/shared/data/nyu/cnndm/train.txt.tgt -valid_src /snakepit/shared/data/nyu/cnndm/val.txt.src -valid_tgt /snakepit/shared/data/nyu/cnndm/val.txt.tgt -save_data keep/cnndm -src_seq_length 10000 -tgt_seq_length 10000 -src_seq_length_trunc 400 -tgt_seq_length_trunc 100 -dynamic_dict -share_vocab -max_shard_size 10485760
-python train.py -save_model models/cnndm -data keep/cnndm -copy_attn -global_attention mlp -word_vec_size 512 -rnn_size 512 -layers 2 -encoder_type brnn -train_steps 250000 -max_grad_norm 2 -dropout 0. -batch_size 16 -optim adagrad -learning_rate 0.15 -adagrad_accumulator_init 0.1 -reuse_copy_attn -copy_loss_by_seqlength -bridge -seed 777 -gpuid 0
+python train.py -save_model models/cnndm -data keep/cnndm -copy_attn -global_attention mlp -word_vec_size 256 -rnn_size 512 -layers 2 -encoder_type brnn -train_steps 250000 -max_grad_norm 2 -dropout 0. -batch_size 16 -optim adagrad -learning_rate 0.15 -adagrad_accumulator_init 0.1 -reuse_copy_attn -copy_loss_by_seqlength -bridge -seed 777 -gpuid 0
