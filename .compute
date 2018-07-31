@@ -2,6 +2,6 @@
 source ../tmp/venv/bin/activate
 mkdir keep
 python preprocess.py -train_src /snakepit/shared/data/cornell/newsroom/train.txt.srcp -train_tgt /snakepit/shared/data/cornell/newsroom/train.txt.tgtp -valid_src /snakepit/shared/data/cornell/newsroom/val.txt.srcp -valid_tgt /snakepit/shared/data/cornell/newsroom/val.txt.tgtp -save_data keep/newsroom -src_seq_length 10000 -tgt_seq_length 10000 -src_seq_length_trunc 400 -tgt_seq_length_trunc 100 -dynamic_dict -share_vocab -max_shard_size 10485760
-python train.py -save_model models/newsroom -data keep/newsroom -copy_attn -global_attention mlp -word_vec_size 1024 -rnn_size 512 -enc_layers 2 -dec_layers 1 -encoder_type brnn -train_steps 250000 -max_grad_norm 2 -dropout 0. -batch_size 16 -optim adagrad -learning_rate 0.15 -adagrad_accumulator_init 0.1 -reuse_copy_attn -copy_loss_by_seqlength -bridge -seed 777 -gpuid 0
+python train.py -save_model models/newsroom -data keep/newsroom -copy_attn -global_attention mlp -word_vec_size 2048 -rnn_size 512 -enc_layers 2 -dec_layers 1 -encoder_type brnn -train_steps 250000 -max_grad_norm 2 -dropout 0. -batch_size 16 -optim adagrad -learning_rate 0.15 -adagrad_accumulator_init 0.1 -reuse_copy_attn -copy_loss_by_seqlength -bridge -seed 777 -gpuid 0
 mkdir testout
 python translate.py -gpu 0 -batch_size 8 -beam_size 10 -model models/newsroom_step_250000.pt -src /snakepit/shared/data/cornell/newsroom/val.txt.srcp -output testout/newsroom_step_250000.out -min_length 5 -stepwise_penalty -coverage_penalty summary -beta 5 -length_penalty wu -alpha 0.9 -block_ngram_repeat 3
