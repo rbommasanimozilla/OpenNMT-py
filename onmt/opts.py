@@ -203,7 +203,7 @@ def preprocess_opts(parser):
                        help="Random seed")
 
     group = parser.add_argument_group('Logging')
-    group.add_argument('-report_every', type=int, default=2,
+    group.add_argument('-report_every', type=int, default=25000,
                        help="Report status every this many sentences")
     group.add_argument('-log_file', type=str, default="",
                        help="Output logs to a file under this path.")
@@ -233,7 +233,7 @@ def train_opts(parser):
                        <save_model>_N.pt where N is the number
                        of steps""")
 
-    group.add_argument('-save_checkpoint_steps', type=int, default=5,
+    group.add_argument('-save_checkpoint_steps', type=int, default=50000,
                        help="""Save a checkpoint every X steps""")
     group.add_argument('-keep_checkpoint', type=int, default=1,
                        help="""Keep X checkpoints (negative: keep all)""")
@@ -301,7 +301,7 @@ def train_opts(parser):
                        Approximately equivalent to updating
                        batch_size * accum_count batches at once.
                        Recommended for Transformer.""")
-    group.add_argument('-valid_steps', type=int, default=5,
+    group.add_argument('-valid_steps', type=int, default=50000,
                        help='Perfom validation every X steps')
     group.add_argument('-valid_batch_size', type=int, default=32,
                        help='Maximum batch size for validation')
@@ -378,7 +378,7 @@ def train_opts(parser):
                        help="""Number of warmup steps for custom decay.""")
 
     group = parser.add_argument_group('Logging')
-    group.add_argument('-report_every', type=int, default=2,
+    group.add_argument('-report_every', type=int, default=25000,
                        help="Print stats at this interval.")
     group.add_argument('-log_file', type=str, default="",
                        help="Output logs to a file under this path.")
