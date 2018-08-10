@@ -1,0 +1,3 @@
+[submodule "rouge-baselines"]
+	path = rouge-baselines
+	url = https://github.com/sebastianGehrmann/rouge-baselines
