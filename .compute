@@ -1,3 +1,3 @@
 #!/bin/bash
 source ../tmp/venv/bin/activate
-python train.py -save_model /snakepit/jobs/1134/keep/newsroom -data /snakepit/shared/data/cornell/newsroom-tagged/preprocessed/newsroom-tagged  -copy_attn -global_attention mlp -word_vec_size 2048 -rnn_size 256 -enc_layers 4 -dec_layers 1 -encoder_type brnn -train_steps 250000 -max_grad_norm 2 -dropout 0. -batch_size 16 -optim adagrad -learning_rate 0.15 -adagrad_accumulator_init 0.1 -reuse_copy_attn -copy_loss_by_seqlength -bridge -seed 777 -gpuid 0
+python train.py -save_model /snakepit/jobs/1135/keep/newsroom -data /snakepit/shared/data/cornell/newsroom-tagged/preprocessed/newsroom-tagged  -copy_attn -global_attention mlp -word_vec_size 2048 -rnn_size 512 -enc_layers 4 -dec_layers 1 -encoder_type brnn -train_steps 250000 -max_grad_norm 2 -dropout 0. -batch_size 16 -optim adagrad -learning_rate 0.15 -adagrad_accumulator_init 0.1 -reuse_copy_attn -copy_loss_by_seqlength -bridge -seed 777 -gpuid 0
