@@ -1,0 +1,76 @@
+Instructions for Setting up OpenNMT-py models to run on the Newsroom Dataset (Grusky et al., 2018)
+
+This document is intended for Mozilla personnel, who can ask the Berlin cluster.
+For parts of this document that don't make sense for other viewers/general concerns,
+contact rishibommasani@gmail.com. This document specifies paths as per the Berlin cluster and assumes
+a functional pit installation/fluency with using the pit client as needed.
+As a consequence, I merely give the commands and preliminary setup.
+
+.compute and .install files that are artifacts of my development on the product are available in the repository and can be used as is
+
+The overarching steps of this setup can be summarized below:
+1. Acquiring Data
+2. Running Custom Preprocessing
+3. Running OpenNMT-py Preprocessing
+4. Training Model
+5. Testing Model
+
+Steps 6 and 7 theoretically in this pipeline, which are:
+   6. Evaluating using metrics like ROUGE/METEOR
+   7. Post-processing
+are not core aspects of this project and can be conducted easily using existing
+libraries after the aforementioned setup.
+
+1. Acquiring Data and 2. Running Custom Preprocessing
+   There are 3 ways to obtain the dataset in the processed form that is required.
+   The first is to replicate the steps below for processing the data, denoted by [A]
+   The second is to use the processed copy of the data made available, denoted by [B]
+   The third is to use processed copies already available on the server, denoted by [C]
+
+[A]
+1. Obtain a copy of the dataset: Contact rishibommasani@gmail.com for permission
+2. a. Download and extract the dataset to get 3 jsonl files: train, dev, test
+   b. Clone the Mozilla fork of OpenNMT-py repo at https://github.com/rbommasanimozilla/OpenNMT-py
+3. Run the script newsroompp.py in the same folder as the data (handles extraction from jsonls, newlines, sentence tagging for targets)
+   This will generate .tgt.tagged, .src, and .ttl files for each of the 3 partitions
+   Remark: Verify correctness, i.e. that .src and .tgt.tagged files are still aligned
+4. Download and install Stanford CoreNLP PTB Tokenizer using the instructions here:
+   https://github.com/abisee/cnn-dailymail
+   as described under Option 2 Step 2
+5. Run the PTB tokenizer as follows on each of the 9 files (train.txt.tgt.tagged, train.txt.src, ...)
+   and output the results to the corresponding file appended with 'p', i.e.:
+   java edu.stanford.nlp.process.PTBTokenizer -preserveLines -lowerCase train.txt.src > train.txt.srcp
+   EXTREMELY IMPORTANT: Manually verify the alignment is preserved.
+   In particular, the PTBTokenizer can insert newlines for some very obscure
+   characters it is not familiar with, which will break the alignment of
+   the article-summary parallel corpus.
+6. Take the resulting .xxxp files and add them to a newsroom folder
+7. Validate that the resulting newsroom folder is of the same format described in
+   [B] 2
+
+[B]
+1. Obtain the processed files here (not actively updated):
+   https://drive.google.com/file/d/1hV71ciKEloOKkHojwqHorZX0RcyB777U/view?usp=sharing
+   Note: If the above link does not work, contact rbommasani@mozilla.com
+2. Extract and you should have a newsroom folder with 9 files of the form:
+   x.txt.y, where x is in [train, val, test] and y is in [srcp, tgtp.tagged, ttlp]
+   Remark: This will allow you skip the Custom preprocessing step
+
+[C]
+1. The dataset should be available in the shared folder here (and you can skip both preprocessing steps):
+   /snakepit/shared/data/cornell/newsroom-tagged/preprocessed/newsroom-tagged
+
+3. Running OpenNMT-py Preprocessing:
+python preprocess.py -train_src path to train.txt.srcp -train_tgt path to train.txt.tgtp.tagged -valid_src path to val.txt.srcp -valid_tgt path to val.txt.tgtp.tagged -save_data data/newsroom/newsroom -src_seq_length 10000 -tgt_seq_length 10000 -src_seq_length_trunc 1000 -tgt_seq_length_trunc 200 -dynamic_dict -share_vocab -max_shard_size 1048576
+
+4. Training Model
+   Obviously set the parameters as desired, but use the general strucuture (refer to onmt/opts.py for more params)
+   python train.py -save_model /snakepit/jobs/current job #/keep/newsroom (or wherever else you like) -data /snakepit/shared/data/cornell/newsroom-tagged/preprocessed/newsroom-tagged  -copy_attn -global_attention mlp -word_vec_size 256 -rnn_size 256 -enc_layers 2 -dec_layers 2 -encoder_type brnn -train_steps 250000 -max_grad_norm 2 -dropout 0. -batch_size 16 -optim adagrad -learning_rate 0.15 -adagrad_accumulator_init 0.1 -reuse_copy_attn -copy_loss_by_seqlength -bridge -seed 777 -gpuid 0
+   This command works correctly assuming you specify 1 GPU using pit. If you allocate more GPUs, this should also work (i.e. multi-GPU is supported), but I haven't figured out to do this and isn't currently high priority for me
+
+5. Testing Model
+   Similar to training the model, specify the params as needed
+   Also, it is best to use a truncated version of the the src file used in inference (i.e. val.txt.src generally)
+   Such a file is available in the keep directory of job 1184 currently, the truncation can be done using linux commands/also there is a small python function for handling it newsroompp.py
+   python translate.py -model /snakepit/jobs/1090/keep/newsroom_step_250000.pt -output /snakepit/jobs/1184/keep/newsroom-1-5_step_250000.out -gpu 0 -batch_size 1 -beam_size 5 -src /snakepit/jobs/1184/keep/val.txt.srcp.trunc -min_length 5 -stepwise_penalty -coverage_penalty summary -beta 5 -length_penalty wu -alpha 0.9 -block_ngram_repeat 3 -ignore_when_blocking "." "</t>" "<t>"
+   This command works corectly with or without GPU specified (shrink batch size to 1 regardless, batching doesn't help for models with copy attention currently, nor can the -fast flag in OpenNMT-py be used)
